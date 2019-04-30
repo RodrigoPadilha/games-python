@@ -1,39 +1,127 @@
+import random
+
+
 def jogar():
 
-    print('*****************************************')
-    print('****** Bem vindo ao jogo da Forca! ******')
-    print('*****************************************')
+    imprime_mensagem_abertura()
+    palavra_secreta = carrega_personagem_secreto()
+    letras_reveladas = ['_' for letra in palavra_secreta] # letras_reveladas = ['_','_','_','_','_','_']
 
-    palavra_secreta = 'mario'
-    chances = 5
+    tentativas = 7
     qtd_acertos = 0
     encontrou_chute = False
     vencedor = False
-    while chances > 0 and not vencedor:
-        print('Qual a letra você acha que a palavr possui?')
-        chute = input('Insira a letra:').strip()
+
+    while tentativas > 0 and not vencedor:
+        desenha_forca(letras_reveladas, tentativas)
+        chute = input('Qual a letra do Personagem? ').strip()
 
         for index in range(len(palavra_secreta)):
             if chute.upper() == palavra_secreta[index].upper():
-                print('Encontrou a letra {} no index {}'.format(chute, index))
+                letras_reveladas[index] = palavra_secreta[index]
                 encontrou_chute = True
                 qtd_acertos += 1
 
         if not encontrou_chute:
-            chances -= 1
-            print('chances ', chances)
+            tentativas -= 1
 
         encontrou_chute = False
         vencedor = qtd_acertos == len(palavra_secreta)
 
     if vencedor:
-        print('Parabéns, vc Ganhou!!!')
-        print('¯\_(ツ)_/¯')
+        imprime_mensagem_vencedor()
     else:
-        print('Vc Perdeu!')
-        print(':-(')
+        imprime_mensagem_perdedor(palavra_secreta)
+        desenha_forca(letras_reveladas, tentativas)
 
-    print('Fim do Jogo')
+
+def imprime_mensagem_abertura():
+    print('*******************************************************')
+    print('****** Bem vindo ao jogo da Forca StreetFigther! ******')
+    print('*******************************************************')
+
+
+def imprime_mensagem_vencedor():
+    print("Parabéns, você ganhou! ¯\_(ツ)_/¯")
+    print("       ___________      ")
+    print("      '._==_==_=_.'     ")
+    print("      .-\\:      /-.    ")
+    print("     | (|:.     |) |    ")
+    print("      '-|:.     |-'     ")
+    print("        \\::.    /      ")
+    print("         '::. .'        ")
+    print("           ) (          ")
+    print("         _.' '._        ")
+    print("        '-------'       ")
+
+
+def imprime_mensagem_perdedor(palavra_secreta):
+    print('Vc Perdeu! O personagem era {}'.format(palavra_secreta))
+    print(':-(')
+
+
+def desenha_forca(letras_reveladas, tentativas):
+    print(letras_reveladas)
+
+    print("  _______     ")
+    print(" |/      |    ")
+
+    if tentativas == 6:
+        print(" |      (_)   ")
+        print(" |            ")
+        print(" |            ")
+        print(" |            ")
+
+    if tentativas == 5:
+        print(" |      (_)   ")
+        print(" |      \     ")
+        print(" |            ")
+        print(" |            ")
+
+    if tentativas == 4:
+        print(" |      (_)   ")
+        print(" |      \|    ")
+        print(" |            ")
+        print(" |            ")
+
+    if tentativas == 3:
+        print(" |      (_)   ")
+        print(" |      \|/   ")
+        print(" |            ")
+        print(" |            ")
+
+    if tentativas == 2:
+        print(" |      (_)   ")
+        print(" |      \|/   ")
+        print(" |       |    ")
+        print(" |            ")
+
+    if tentativas == 1:
+        print(" |      (_)   ")
+        print(" |      \|/   ")
+        print(" |       |    ")
+        print(" |      /     ")
+
+    if tentativas == 0:
+        print(" |      (_)   ")
+        print(" |      \|/   ")
+        print(" |       |    ")
+        print(" |      / \   ")
+
+    print(" |            ")
+    print("_|___         ")
+    print()
+
+
+def carrega_personagem_secreto():
+    arquivo = open('personagens_street_figther.txt', 'r')
+    personagens = []
+    for linha in arquivo:
+        personagens.append(linha.strip())
+    arquivo.close()
+    personagem = random.randrange(0, len(personagens))
+
+    return list(personagens[personagem])
 
 
 if __name__ == '__main__':
